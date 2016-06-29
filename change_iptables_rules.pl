@@ -90,12 +90,10 @@ sub replace_nat()
 
     if ($ISP eq "avantel")
     {
-        #$content =~ s/\$rtk/\$avantel/g;
 	$content =~ s/\$rtk(?!(.*?)(#don't replace this line))/\$avantel/ig;
     }
     elsif ($ISP eq "rtk")
     {
-        #$content =~ s/\$avantel/\$rtk/g;
 	$content =~ s/\$avantel(?!(.*?)(#don't replace this line))/\$rtk/ig;
     }
     else
