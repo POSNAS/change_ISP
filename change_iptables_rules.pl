@@ -4,12 +4,8 @@
 # ./change_iptables_rules.pl avantel
 # ./change_iptables_rules.pl rtk
 ######################################################################
-
 use strict;
 use warnings;
-
-#to clear screen
-#system 'clear';
 
 #get name of internet service provider
 my $ISP = $ARGV[0];
@@ -51,11 +47,10 @@ print "*Done\n";
 ################################################################################
 sub get_file_content()
 {
-    my ($mode) = @_; 
+    my ($mode) = shift; 
     my $fileContent;
     my $F;
 
-    #open file
     if ($mode eq "nat")
     {
 	open($F, '<', $file_nat) or die $!;
@@ -64,7 +59,7 @@ sub get_file_content()
     {
 	open($F, '<', $file_rules) or die $!;
     }
-elsif($mode eq "route")
+    elsif($mode eq "route")
     {
         open($F, '<', $file_route) or die $!;
     }
@@ -75,7 +70,6 @@ elsif($mode eq "route")
         $fileContent = <$F>;
     }
 
-    #close file
     close($F);
 
     return $fileContent;
@@ -86,7 +80,7 @@ elsif($mode eq "route")
 ################################################################################
 sub replace_nat()
 {
-    my ($content) = @_;
+    my ($content) = shift;
 
     if ($ISP eq "avantel")
     {
@@ -101,9 +95,9 @@ sub replace_nat()
         die "Don't know about '$ISP'";
     }
 
-    &write_to_log($content, $file_nat_new);
+    write_to_log($content, $file_nat_new);
 
-    &save_result($content, $file_nat_new);
+    save_result($content, $file_nat_new);
 }
 
 ################################################################################
@@ -111,7 +105,7 @@ sub replace_nat()
 ################################################################################
 sub replace_rules()
 {
-    my ($content) = @_;
+    my ($content) = shift;
 
     if ($ISP eq "avantel")
     {
@@ -126,9 +120,9 @@ sub replace_rules()
         die "Don't know about '$ISP'";
     }
 
-    &write_to_log($content, $file_rules_new);
+    write_to_log($content, $file_rules_new);
 
-    &save_result($content, $file_rules_new);
+    save_result($content, $file_rules_new);
 }
 
 ################################################################################
@@ -136,7 +130,7 @@ sub replace_rules()
 ################################################################################
 sub replace_route()
 {
-    my ($content) = @_;
+    my ($content) = shift;
 
     if ($ISP eq "avantel")
     {
@@ -151,9 +145,9 @@ sub replace_route()
         die "Don't know about '$ISP'";
     }
 
-    &write_to_log($content, $file_route_new);
+    write_to_log($content, $file_route_new);
 
-    &save_result($content, $file_route_new);
+    save_result($content, $file_route_new);
 }
 
 ################################################################################
@@ -163,13 +157,10 @@ sub save_result()
 {
     my ($content, $file) = @_;
 
-    #open file
     open(my $fh, '>', $file) or die "Don't open '$file' $!";
 
-    #write to new file
     print $fh $content;
 
-    #close file
     close $fh;
 }
 
@@ -204,9 +195,9 @@ sub write_to_log()
 ################################################################################
 sub change_iptables_nat()
 {
-    my ($ISP) = @_;
+    my ($ISP) = shift;
 
-    &replace_nat(&get_file_content("nat"));
+    replace_nat(get_file_content('nat'));
 }
 
 ################################################################################
@@ -214,9 +205,9 @@ sub change_iptables_nat()
 ################################################################################
 sub change_iptables_rules()
 {
-    my ($ISP) = @_;
+    my ($ISP) = shift;
 
-    &replace_rules(&get_file_content("rules"));
+    replace_rules(get_file_content('rules'));
 }
 
 ################################################################################
@@ -224,7 +215,7 @@ sub change_iptables_rules()
 ################################################################################
 sub change_route()
 {
-    my ($ISP) = @_;
+    my ($ISP) = shift;
 
-    &replace_route(&get_file_content("route"));
+    replace_route(get_file_content('route'));
 }
