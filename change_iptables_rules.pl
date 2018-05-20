@@ -15,24 +15,24 @@ if (not defined $ISP)
     die "Need name of internet service provider, for example: avantel or rtk\n";
 }
 
-my $file_nat = "/etc/network/if-up.d/001enable-nat";
-my $file_rules = "/etc/network/if-up.d/002iptables-rules";
-my $file_route = "/iptables/select.route";
+my $file_nat 		= "/etc/network/if-up.d/001enable-nat";
+my $file_rules 		= "/etc/network/if-up.d/002iptables-rules";
+my $file_route 		= "/iptables/select.route";
 
-my $file_nat_new = "/etc/network/if-up.d/001enable-nat";
-my $file_rules_new = "/etc/network/if-up.d/002iptables-rules";
-my $file_route_new = "/iptables/select.route";
+my $file_nat_new 	= "/etc/network/if-up.d/001enable-nat";
+my $file_rules_new 	= "/etc/network/if-up.d/002iptables-rules";
+my $file_route_new 	= "/iptables/select.route";
 
-my $reload_full = "/bin/iptables-fullreload";
+my $reload_full 	= "/bin/iptables-fullreload";
 
 #to change - /etc/network/if-up.d/001enable-nat
-&change_iptables_nat($ISP);
+change_iptables_nat($ISP);
 
 #to change - /etc/network/if-up.d/002iptables-rules
-&change_iptables_rules($ISP);
+change_iptables_rules($ISP);
 
 #to change /iptables/select.route
-&change_route($ISP);
+change_route($ISP);
 
 system($reload_full);
 
@@ -42,10 +42,7 @@ print "*rules: $file_rules\n";
 print "*route: $file_route\n";
 print "*Done\n";
 
-################################################################################
-#
-################################################################################
-sub get_file_content()
+sub get_file_content
 {
     my ($mode) = shift; 
     my $fileContent;
@@ -75,10 +72,7 @@ sub get_file_content()
     return $fileContent;
 }
 
-################################################################################
-#
-################################################################################
-sub replace_nat()
+sub replace_nat
 {
     my ($content) = shift;
 
@@ -100,10 +94,7 @@ sub replace_nat()
     save_result($content, $file_nat_new);
 }
 
-################################################################################
-#
-################################################################################
-sub replace_rules()
+sub replace_rules
 {
     my ($content) = shift;
 
@@ -125,10 +116,7 @@ sub replace_rules()
     save_result($content, $file_rules_new);
 }
 
-################################################################################
-#
-################################################################################
-sub replace_route()
+sub replace_route
 {
     my ($content) = shift;
 
@@ -150,10 +138,7 @@ sub replace_route()
     save_result($content, $file_route_new);
 }
 
-################################################################################
-#
-################################################################################
-sub save_result()
+sub save_result
 {
     my ($content, $file) = @_;
 
@@ -164,10 +149,7 @@ sub save_result()
     close $fh;
 }
 
-################################################################################
-#
-################################################################################
-sub write_to_log()
+sub write_to_log
 {
     my ($log, $file) = @_;
 
@@ -190,30 +172,21 @@ sub write_to_log()
     close $fh;
 }
 
-################################################################################
-#
-################################################################################
-sub change_iptables_nat()
+sub change_iptables_nat
 {
     my ($ISP) = shift;
 
     replace_nat(get_file_content('nat'));
 }
 
-################################################################################
-#
-################################################################################
-sub change_iptables_rules()
+sub change_iptables_rules
 {
     my ($ISP) = shift;
 
     replace_rules(get_file_content('rules'));
 }
 
-################################################################################
-#
-################################################################################
-sub change_route()
+sub change_route
 {
     my ($ISP) = shift;
 
